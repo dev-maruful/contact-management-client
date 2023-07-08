@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 const Contacts = () => {
   const API = useAxios();
   const [contacts, setContacts] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     API("/contacts")
@@ -30,9 +31,30 @@ const Contacts = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleSearch = () => {
+    API(`/contactSearchByName/${searchText}`)
+      .then((data) => {
+        setContacts(data?.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <SectionTitle title="Contacts"></SectionTitle>
+      <div className="text-center mb-5">
+        <input
+          onChange={(e) => setSearchText(e.target.value)}
+          className="border border-blue-500 pl-2 py-2 mr-1"
+          type="search"
+          placeholder="search by name"
+          name="search"
+          id="search"
+        />
+        <button onClick={handleSearch} className="p-2 bg-blue-500 text-white">
+          Search
+        </button>
+      </div>
       <Link to="/addContact">
         <div className="text-end">
           <button className="w-52 py-1 px-5 border-2 border-blue-500 uppercase font-medium hover:bg-blue-500 cursor-pointer hover:text-white mb-5">
