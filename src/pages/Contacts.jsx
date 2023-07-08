@@ -39,6 +39,14 @@ const Contacts = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleSort = () => {
+    API(`/sortByName`)
+      .then((data) => {
+        setContacts(data?.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <SectionTitle title="Contacts"></SectionTitle>
@@ -55,13 +63,19 @@ const Contacts = () => {
           Search
         </button>
       </div>
-      <Link to="/addContact">
-        <div className="text-end">
+      <div className="flex gap-5 justify-end">
+        <button
+          onClick={handleSort}
+          className="w-52 py-1 px-5 border-2 border-blue-500 uppercase font-medium hover:bg-blue-500 cursor-pointer hover:text-white mb-5"
+        >
+          Sort by name
+        </button>
+        <Link to="/addContact">
           <button className="w-52 py-1 px-5 border-2 border-blue-500 uppercase font-medium hover:bg-blue-500 cursor-pointer hover:text-white mb-5">
             Add New Contact
           </button>
-        </div>
-      </Link>
+        </Link>
+      </div>
       <div className="overflow-x-auto max-w-3xl mx-auto">
         <table className="table">
           {/* head */}
