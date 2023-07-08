@@ -63,7 +63,7 @@ const Contacts = () => {
           Search
         </button>
       </div>
-      <div className="flex gap-5 justify-end">
+      <div className="flex gap-5 justify-center">
         <button
           onClick={handleSort}
           className="w-52 py-1 px-5 border-2 border-blue-500 uppercase font-medium hover:bg-blue-500 cursor-pointer hover:text-white mb-5"
