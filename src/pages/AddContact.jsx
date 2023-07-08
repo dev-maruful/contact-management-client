@@ -15,17 +15,17 @@ const AddContact = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     const { name, phone, email } = data;
 
     const contactInfo = { name, phone, email };
 
     API.post("/contacts", contactInfo)
       .then((data) => {
-        console.log(data.data);
-        if (data?.data?.message) {
+        if (data?.data?.insertedId) {
           reset();
           toast.success("Contact added successfully");
+        } else if (data?.data?.message) {
+          toast.error(data?.data?.message);
         }
       })
       .catch((err) => console.log(err));

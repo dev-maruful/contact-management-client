@@ -15,7 +15,9 @@ const Contacts = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleUpdate = () => {};
+  const handleUpdate = (id) => {
+    console.log("hello");
+  };
 
   const handleDelete = () => {};
 
@@ -44,17 +46,14 @@ const Contacts = () => {
           </thead>
           <tbody>
             {contacts.map((contact, index) => (
-              <tr key={index}>
+              <tr key={contact._id}>
                 <th>{index + 1}</th>
                 <td>{contact.name}</td>
                 <td>{contact.phone}</td>
                 <td>{contact.email}</td>
                 <td>
-                  <Link to="updateContact">
-                    <button
-                      onClick={handleUpdate}
-                      className="py-2 px-3 border-2 border-blue-500 hover:bg-blue-500 hover:text-white"
-                    >
+                  <Link to={`/updateContact/${contact._id}`}>
+                    <button className="py-2 px-3 border-2 border-blue-500 hover:bg-blue-500 hover:text-white">
                       Update
                     </button>
                   </Link>

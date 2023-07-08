@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SectionTitle from "../components/SectionTitle";
 import useAxios from "../hooks/useAxios";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const UpdateContact = () => {
+  const { id } = useParams();
   const API = useAxios();
+  const [currentContact, setCurrentContact] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    API(`/contacts/${id}`).then((data) => {
+      setCurrentContact(data.data);
+    });
+  }, []);
 
   const {
     register,
@@ -14,14 +25,21 @@ const UpdateContact = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     const { name, phone, email } = data;
 
     const contactInfo = { name, phone, email };
 
-    API.put(`/contacts/${phone}`, contactInfo).then((data) => {
-      console.log(data.data);
-    });
+    API.put(`/contacts/${id}`, contactInfo)
+      .then((data) => {
+        if (data.data.modifiedCount > 0) {
+          reset();
+          toast.success("Contact updated successfully");
+          navigate("/");
+        } else {
+          toast.error("Update at least one field");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -39,15 +57,10 @@ const UpdateContact = () => {
             Name
           </label>
           <input
-            {...register("name", { required: true })}
+            {...register("name")}
             id="name"
             className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-400"
           />
-          {errors.name && (
-            <span className="text-red-500 text-xs mt-1">
-              This field is required
-            </span>
-          )}
         </div>
         <div className="mb-4">
           <label
@@ -57,15 +70,10 @@ const UpdateContact = () => {
             Phone Number
           </label>
           <input
-            {...register("phone", { required: true })}
+            {...register("phone")}
             id="phone"
             className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-400"
           />
-          {errors.phone && (
-            <span className="text-red-500 text-xs mt-1">
-              This field is required
-            </span>
-          )}
         </div>
         <div className="mb-4">
           <label
@@ -75,15 +83,10 @@ const UpdateContact = () => {
             Email Address
           </label>
           <input
-            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+            {...register("email", { pattern: /^\S+@\S+$/i })}
             id="email"
             className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-blue-400"
           />
-          {errors.email && (
-            <span className="text-red-500 text-xs mt-1">
-              Please enter a valid email address
-            </span>
-          )}
         </div>
         <button
           type="submit"
