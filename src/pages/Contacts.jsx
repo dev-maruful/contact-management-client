@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SectionTitle from "../components/SectionTitle";
 import useAxios from "../hooks/useAxios";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Contacts = () => {
   const API = useAxios();
@@ -15,11 +16,19 @@ const Contacts = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleUpdate = (id) => {
-    console.log("hello");
+  const handleDelete = (id) => {
+    API.delete(`/contacts/${id}`)
+      .then((data) => {
+        if (data?.data?.deletedCount) {
+          toast.success("Contact deleted successfully");
+          const existingContacts = contacts.filter(
+            (contact) => contact._id !== id
+          );
+          setContacts(existingContacts);
+        }
+      })
+      .catch((err) => console.log(err));
   };
-
-  const handleDelete = () => {};
 
   return (
     <div>
@@ -60,7 +69,7 @@ const Contacts = () => {
                 </td>
                 <td>
                   <button
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(contact._id)}
                     className="py-2 px-3 border-2 border-red-500 hover:bg-red-500 hover:text-white"
                   >
                     Delete

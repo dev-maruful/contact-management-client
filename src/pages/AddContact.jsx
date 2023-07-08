@@ -3,9 +3,11 @@ import SectionTitle from "../components/SectionTitle";
 import { useForm } from "react-hook-form";
 import useAxios from "../hooks/useAxios";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AddContact = () => {
   const API = useAxios();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -24,6 +26,7 @@ const AddContact = () => {
         if (data?.data?.insertedId) {
           reset();
           toast.success("Contact added successfully");
+          navigate("/");
         } else if (data?.data?.message) {
           toast.error(data?.data?.message);
         }
