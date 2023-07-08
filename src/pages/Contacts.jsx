@@ -1,10 +1,21 @@
 import React from "react";
 import SectionTitle from "../components/SectionTitle";
+import useAxios from "../hooks/useAxios";
+import { Link } from "react-router-dom";
 
 const Contacts = () => {
+  const API = useAxios();
+
   return (
-    <div className="mt-10">
+    <div>
       <SectionTitle title="Contacts"></SectionTitle>
+      <Link to="/addContact">
+        <div className="text-end">
+          <button className="w-52 py-1 px-5 border-2 border-blue-500 uppercase font-medium hover:bg-blue-500 cursor-pointer hover:text-white mb-5">
+            Add New Contact
+          </button>
+        </div>
+      </Link>
       <div className="overflow-x-auto max-w-3xl mx-auto">
         <table className="table">
           {/* head */}
