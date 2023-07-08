@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import SectionTitle from "../components/SectionTitle";
-import { useForm } from "react-hook-form";
 import useAxios from "../hooks/useAxios";
-import { toast } from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
-const AddContact = () => {
+const UpdateContact = () => {
   const API = useAxios();
 
   const {
@@ -20,20 +19,14 @@ const AddContact = () => {
 
     const contactInfo = { name, phone, email };
 
-    API.post("/contacts", contactInfo)
-      .then((data) => {
-        console.log(data.data);
-        if (data?.data?.message) {
-          reset();
-          toast.success("Contact added successfully");
-        }
-      })
-      .catch((err) => console.log(err));
+    API.put(`/contacts/${phone}`, contactInfo).then((data) => {
+      console.log(data.data);
+    });
   };
 
   return (
     <div>
-      <SectionTitle title="Add a contact"></SectionTitle>
+      <SectionTitle title="Update Contact"></SectionTitle>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-md mx-auto p-6 bg-white rounded shadow-md"
@@ -96,11 +89,11 @@ const AddContact = () => {
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          Add
+          Update
         </button>
       </form>
     </div>
   );
 };
 
-export default AddContact;
+export default UpdateContact;
